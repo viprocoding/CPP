@@ -32,7 +32,7 @@ namespace raos {
     class array
     {
     public:
-    // LIFESTYLE
+    // LIFECYCLE
         
         /** Default constructor.
          */
@@ -129,21 +129,21 @@ namespace raos {
          */
         array<T> operator+(const array<T>& obj) const;
 
-		/** Friend addition operator
-		 * 
-		 * @param data		Left operand.
-		 * @param obj		Right operand.
-		 * @return			Result of the addition.
-		 *
-		 * [Function defintion should be moved outside of the class, but havn't
-		 *  figured out how to make that compile yet]
-		 */
-		friend array<T> operator+(const T& data, const array<T>& obj) {
-			array<T> tmp(obj);
-			tmp += obj;
+        /** Friend addition operator
+         * 
+         * @param data      Left operand.
+         * @param obj       Right operand.
+         * @return          Result of the addition.
+         *
+         * [Function defintion should be moved outside of the class, but havn't
+         *  figured out how to make that compile yet]
+         */
+        friend array<T> operator+(const T& data, const array<T>& obj) {
+            array<T> tmp(obj);
+            tmp += obj;
 
-			return tmp;
-		}
+            return tmp;
+        }
 
     // OPERATIONS
         
