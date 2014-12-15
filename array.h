@@ -76,16 +76,16 @@ namespace raos {
 		/** Index operator
 		 *
 		 * @param index		Index of the associated element in the array.
-		 * @return			Constant reference to the element indexed by index.
+		 * @return			Reference to the element indexed by index.
 		 */
-		const array<T>& operator[](const int& index);
+		T& operator[](const int& index);
 
 		/** Index operator
 		 *
 		 * @param index		Index of the associated element in the array.
-		 * @return			Reference to the element indexed by index.
+		 * @return			Copy of the element indexed by index.
 		 */
-		array<T>& operator[](const int& index);
+		T operator[](const int& index) const;
 
     // OPERATIONS
         
@@ -183,13 +183,13 @@ namespace raos {
     }
 
 	template<class T>
-	array<T> array<T>::operator[](const int& index)
+	T& array<T>::operator[](const int& index)
 	{
 		return *(ptr + index);
 	}
 
 	template<class T>
-	const array<T>& array<T>::operator[](const int& index)
+	T array<T>::operator[](const int& index) const
 	{
 		return *(ptr + index);
 	}
