@@ -13,7 +13,7 @@
 // Libraries
 #include <new>          // bad_alloc
 #include <stdexcept>    // invalid_argument
-#include <utility>		// more comparison operators than ==, <=
+#include <utility>      // more comparison operators than ==, <=
 
 using namespace std::rel_ops;
 
@@ -76,58 +76,58 @@ namespace raos {
          */
         const array<T>& operator=(array&& from);
 
-		/** Index operator
-		 *
-		 * @param index		Index of the associated element in the array.
-		 * @return			Reference to the element indexed by index.
-		 */
-		T& operator[](const int& index);
+        /** Index operator
+         *
+         * @param index     Index of the associated element in the array.
+         * @return          Reference to the element indexed by index.
+         */
+        T& operator[](const int& index);
 
-		/** Index operator
-		 *
-		 * @param index		Index of the associated element in the array.
-		 * @return			Copy of the element indexed by index.
-		 */
-		T operator[](const int& index) const;
+        /** Index operator
+         *
+         * @param index     Index of the associated element in the array.
+         * @return          Copy of the element indexed by index.
+         */
+        T operator[](const int& index) const;
 
-		/** Equal to operator
-		 *
-		 * @param obj		Object that is to be compared with this object.
-		 * @return			True if objects are equal.
-		 */
-		bool operator==(const array<T>& obj) const;
+        /** Equal to operator
+         *
+         * @param obj       Object that is to be compared with this object.
+         * @return          True if objects are equal.
+         */
+        bool operator==(const array<T>& obj) const;
 
-		/** Less than or equal to operator
-		 *
-		 * @param obj		Object that is to be compared with this object.
-		 * @return			True if objects are equal.
-		 */
-		bool operator<=(const array<T>& obj) const;
-		
-		/** Arithmetic operator
-		 * 
-		 * @param obj		Object that is to be added to this object.
-		 * @return			Constant reference to this object.
-		 *
-		 * @invalid_argument	Throws an exception if sizes doesn't match.
-		 */
-		const array<T>& operator+=(const array<T>& obj);
+        /** Less than or equal to operator
+         *
+         * @param obj       Object that is to be compared with this object.
+         * @return          True if objects are equal.
+         */
+        bool operator<=(const array<T>& obj) const;
+        
+        /** Arithmetic operator
+         * 
+         * @param obj       Object that is to be added to this object.
+         * @return          Constant reference to this object.
+         *
+         * @invalid_argument    Throws an exception if sizes doesn't match.
+         */
+        const array<T>& operator+=(const array<T>& obj);
 
-		/** Arithmetic operator
-		 * 
-		 * @param data		Value to att do this object.
-		 * @return			Constant reference to this object.
-		 */
-		const array<T>& operator+=(const T& data);
+        /** Arithmetic operator
+         * 
+         * @param data      Value to att do this object.
+         * @return          Constant reference to this object.
+         */
+        const array<T>& operator+=(const T& data);
 
-		/** Arithmetic operator
-		 * 
-		 * @param obj		Object that is to be added with this object
-		 * @return			A copy of the result.
-		 * 
-		 * @invalid_argument	Throws an exception if sixes doesn't match.
-		 */
-		array<T> operator+(const array<T>& obj) const;
+        /** Arithmetic operator
+         * 
+         * @param obj       Object that is to be added with this object
+         * @return          A copy of the result.
+         * 
+         * @invalid_argument    Throws an exception if sixes doesn't match.
+         */
+        array<T> operator+(const array<T>& obj) const;
 
     // OPERATIONS
         
@@ -178,10 +178,10 @@ namespace raos {
     array<T>::array(array<T>&& from)
         : n(from.n)
     {
-		if (*this != from) {
-			ptr = from.ptr;		// steal from's ptr
-			from.ptr = nullptr;
-		}
+        if (*this != from) {
+            ptr = from.ptr;     // steal from's ptr
+            from.ptr = nullptr;
+        }
     }
 
     template<class T>
@@ -211,7 +211,7 @@ namespace raos {
     const array<T>& array<T>::operator=(array<T>&& from)
     {
         if (*this != from) {
-			delete[] ptr;	// clean up
+            delete[] ptr;   // clean up
             n = from.n;
 
             // steal from's ptr
@@ -221,72 +221,72 @@ namespace raos {
         return *this;
     }
 
-	template<class T>
-	T& array<T>::operator[](const int& index)
-	{
-		return *(ptr + index);
-	}
+    template<class T>
+    T& array<T>::operator[](const int& index)
+    {
+        return *(ptr + index);
+    }
 
-	template<class T>
-	T array<T>::operator[](const int& index) const
-	{
-		return *(ptr + index);
-	}
+    template<class T>
+    T array<T>::operator[](const int& index) const
+    {
+        return *(ptr + index);
+    }
 
-	template<class T>
-	bool array<T>::operator==(const array<T>& obj) const
-	{
-		if (n != obj.n)
-			return false;
+    template<class T>
+    bool array<T>::operator==(const array<T>& obj) const
+    {
+        if (n != obj.n)
+            return false;
 
-		// *this and obj size matched, proceed to compare elements
-		for (int i = 0, nMin = n < obj.n ? n : obj.n; i < nMin; i++)
-			if (*(ptr + i) != *(obj.ptr + i))
-				return false;
-		return true;
-	}
+        // *this and obj size matched, proceed to compare elements
+        for (int i = 0, nMin = n < obj.n ? n : obj.n; i < nMin; i++)
+            if (*(ptr + i) != *(obj.ptr + i))
+                return false;
+        return true;
+    }
 
-	template<class T>
-	bool array<T>::operator<=(const array<T>& obj) const
-	{
-		for (int i = 0, nMin = n < obj.n ? n : obj.n; i < nMin; i++)
-			if (*(ptr + i) > *(obj.ptr + i))
-				return false;
-		return n <= obj.n;
-	}
+    template<class T>
+    bool array<T>::operator<=(const array<T>& obj) const
+    {
+        for (int i = 0, nMin = n < obj.n ? n : obj.n; i < nMin; i++)
+            if (*(ptr + i) > *(obj.ptr + i))
+                return false;
+        return n <= obj.n;
+    }
 
-	template<class T>
-	const array<T>& array<T>::operator+=(const array<T>& obj)
-	{
-		if (n != obj.n)	// operation is undefined
-			throw std::invalid_argument("array<T>::operator+=");
+    template<class T>
+    const array<T>& array<T>::operator+=(const array<T>& obj)
+    {
+        if (n != obj.n) // operation is undefined
+            throw std::invalid_argument("array<T>::operator+=");
 
-		for (int i = 0; i < n; i++)
-			*(ptr + i) += *(obj.ptr + i);
+        for (int i = 0; i < n; i++)
+            *(ptr + i) += *(obj.ptr + i);
 
-		return *this;
-	}
+        return *this;
+    }
 
-	template<class T>
-	const array<T>& array<T>::operator+=(const T& data)
-	{
-		for (int i = 0; i < n; i++)
-			*(ptr + i) += data;
+    template<class T>
+    const array<T>& array<T>::operator+=(const T& data)
+    {
+        for (int i = 0; i < n; i++)
+            *(ptr + i) += data;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	template<class T>
-	array<T> array<T>::operator+(const array<T>& obj) const
-	{
-		array<T> tmp(*this);
-		tmp += obj;
-		
-		return tmp;
-	}
+    template<class T>
+    array<T> array<T>::operator+(const array<T>& obj) const
+    {
+        array<T> tmp(*this);
+        tmp += obj;
+        
+        return tmp;
+    }
 
 //=============================  OPERATIONS ===================================
-	
+    
 //=============================  ACESS      ===================================
 //=============================  INQUIRY    ===================================
 }
