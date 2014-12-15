@@ -104,7 +104,7 @@ namespace raos {
          */
         bool operator<=(const array<T>& obj) const;
         
-        /** Arithmetic operator
+        /** Addition assignment operator
          * 
          * @param obj       Object that is to be added to this object.
          * @return          Constant reference to this object.
@@ -113,14 +113,14 @@ namespace raos {
          */
         const array<T>& operator+=(const array<T>& obj);
 
-        /** Arithmetic operator
+        /** Addition assignment operator
          * 
          * @param data      Value to att do this object.
          * @return          Constant reference to this object.
          */
         const array<T>& operator+=(const T& data);
 
-        /** Arithmetic operator
+        /** Addition operator
          * 
          * @param obj       Object that is to be added with this object
          * @return          A copy of the result.
@@ -128,6 +128,22 @@ namespace raos {
          * @invalid_argument    Throws an exception if sixes doesn't match.
          */
         array<T> operator+(const array<T>& obj) const;
+
+		/** Friend addition operator
+		 * 
+		 * @param data		Left operand.
+		 * @param obj		Right operand.
+		 * @return			Result of the addition.
+		 *
+		 * [Function defintion should be moved outside of the class, but havn't
+		 *  figured out how to make that compile yet]
+		 */
+		friend array<T> operator+(const T& data, const array<T>& obj) {
+			array<T> tmp(obj);
+			tmp += obj;
+
+			return tmp;
+		}
 
     // OPERATIONS
         
