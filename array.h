@@ -48,13 +48,13 @@ namespace raos {
          *
          * @param from      Value to copy to this object.
          */
-        array(const array& from);
+        array(const array<T>& from);
 
         /** Move constructor.
          *
          * @param from      Rvalue to write to this object.
          */
-        array(array&& from);
+        array(array<T>&& from);
 
         /** Destructor.
          */ 
@@ -67,14 +67,14 @@ namespace raos {
          * @param from      Value to assign to this object.
          * @return          Constant reference to this object
          */
-        const array<T>& operator=(const array& from);
+        const array<T>& operator=(const array<T>& from);
 
         /** Assignment operator (move version).
          *
          * @param from      Rvalue to assign to this object.
          * @return          Constant referense to this object.
          */
-        const array<T>& operator=(array&& from);
+        const array<T>& operator=(array<T>&& from);
 
         /** Index operator
          *
