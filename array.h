@@ -125,7 +125,7 @@ namespace raos {
          * @param obj       Object that is to be added with this object
          * @return          A copy of the result.
          * 
-         * @invalid_argument    Throws an exception if sixes doesn't match.
+         * @invalid_argument    Throws an exception if sizes doesn't match.
          */
         array<T> operator+(const array<T>& obj) const;
 
@@ -133,7 +133,7 @@ namespace raos {
          * 
          * @param data      Left operand.
          * @param obj       Right operand.
-         * @return          Result of the addition.
+         * @return          A temporary object with the result of the addition.
          *
          * [Function defintion should be moved outside of the class, but havn't
          *  figured out how to make that compile yet]
@@ -141,6 +141,88 @@ namespace raos {
         friend array<T> operator+(const T& data, const array<T>& obj) {
             array<T> tmp(obj);
             tmp += obj;
+
+            return tmp;
+        }
+
+		/** Subtraction assignment operator
+		 * 
+		 * @param obj		Object that is to be subctracted from this object.
+		 * @return			Constant reference to this object.
+		 *
+		 * @invalid_argument	Throws an exception if sizes donesn't match.
+		 */
+		const array<T>& operator-=(const array<T>& obj);
+
+		/** Subtraction assinment operator
+		 *
+		 * @param data		Data that is to be subtracted from this object
+		 * @return 			Constant reference to this object.
+		 */
+		const array<T>& operator-=(const T& obj);
+
+		/** Subtraction operator
+		 * 
+		 * @param obj		Object that is to be subtracted with this object.
+		 * @return			A temporary object with the result.
+		 *
+		 * @invalid_argument	Throws an exception if sizes doesn't match.
+		 */
+		array<T> operator-(const array<T>& obj) const;
+
+        /** Friend subtraction operator
+         * 
+         * @param data      Left operand.
+         * @param obj       Right operand.
+         * @return          Temporary object with the result of the subtraction.
+         *
+         * [Function defintion should be moved outside of the class, but havn't
+         *  figured out how to make that compile yet]
+         */
+        friend array<T> operator-(const T& data, const array<T>& obj) {
+            array<T> tmp(obj);
+            tmp -= obj;
+
+            return tmp;
+        }
+		
+		/** Multiplication assignment operator
+		 * 
+		 * @param obj		Object to multiply with this object.
+		 * @return			Constant reference to this object.
+		 *
+		 * @invalid_argument	Throws an exception if sizes donesn't match.
+		 */
+		const array<T>& operator*=(const array<T>& obj);
+
+		/** Multiplication assinment operator
+		 *
+		 * @param data		Data that is to be multiplied wit this object
+		 * @return 			Constant reference to this object.
+		 */
+		const array<T>& operator*=(const T& obj);
+
+		/** Multiplication operator
+		 * 
+		 * @param obj		Object to multiply with this object.
+		 * @return			A temporary object with the result.
+		 *
+		 * @invalid_argument	Throws an exception if sizes doesn't match.
+		 */
+		array<T> operator*(const array<T>& obj) const;
+
+        /** Friend multiplication operator
+         * 
+         * @param data      Left operand.
+         * @param obj       Right operand.
+         * @return          Temporary object with the result of the multip.
+         *
+         * [Function defintion should be moved outside of the class, but havn't
+         *  figured out how to make that compile yet]
+         */
+        friend array<T> operator*(const T& data, const array<T>& obj) {
+            array<T> tmp(obj);
+            tmp *= obj;
 
             return tmp;
         }
@@ -301,6 +383,65 @@ namespace raos {
         return tmp;
     }
 
+	template<class T>
+	const array<T>& array<T>::operator-=(const array<T>& obj)
+	{
+		if (n != obj.n)
+			throw std::invalid_argument("array::operator-=");
+
+		for (int i = 0; i < n; i++)
+			*(ptr + i) -= *(obj.ptr + i);
+
+		return *this;
+	}
+
+	template<class T>
+	const array<T>& array<T>::operator-=(const T& data)
+	{
+		for (int i = 0; i < n; i++)
+			*(ptr + i) -= data;	
+
+		return *this;
+	}
+
+	template<class T>
+	array<T> array<T>::operator-(const array<T>& obj) const
+	{
+		array<T> tmp(*this);
+		tmp -= obj;
+
+		return tmp;
+	}
+
+	template<class T>
+	const array<T>& array<T>::operator*=(const array<T>& obj)
+	{
+		if (n != obj.n)
+			throw std::invalid_argument("array::operator-=");
+
+		for (int i = 0; i < n; i++)
+			*(ptr + i) *= *(obj.ptr + i);
+
+		return *this;
+	}
+
+	template<class T>
+	const array<T>& array<T>::operator*=(const T& data)
+	{
+		for (int i = 0; i < n; i++)
+			*(ptr + i) *= data;	
+
+		return *this;
+	}
+
+	template<class T>
+	array<T> array<T>::operator*(const array<T>& obj) const
+	{
+		array<T> tmp(*this);
+		tmp *= obj;
+
+		return tmp;
+	}
 //=============================  OPERATIONS ===================================
     
 //=============================  ACESS      ===================================
