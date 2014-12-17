@@ -271,6 +271,12 @@ namespace raos {
         
     // ACCESS
 
+		/** Size of array
+		 * 
+		 * @return		Constant reference to the arrays size.
+		 */
+		const unsigned& size(void) const;
+
     // INQUIRY
 
     protected:
@@ -515,6 +521,12 @@ namespace raos {
 //=============================  OPERATIONS ===================================
     
 //=============================  ACESS      ===================================
+
+	template<class T>
+	const unsigned& array<T>::size(void) const
+	{
+		return n;
+	}
 //=============================  INQUIRY    ===================================
 }
 
