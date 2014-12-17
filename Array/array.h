@@ -14,8 +14,8 @@
 #include <new>          // bad_alloc
 #include <stdexcept>    // invalid_argument
 #include <utility>      // more comparison operators than ==, <=
-#include <ostream>		// ostream
-#include <iostream>		// cout
+#include <ostream>      // ostream
+#include <iostream>     // cout
 
 using namespace std::rel_ops;
 
@@ -270,61 +270,61 @@ namespace raos {
             return tmp;
         }
 
-		/** Print operator
-		 * 
-		 * @param stream
-		 * @param obj
-		 * @return
-		 *
+        /** Print operator
+         * 
+         * @param stream
+         * @param obj
+         * @return
+         *
          * [Function defintion should be moved outside of the class, but havn't
          *  figured out how to make that compile yet]
-		 */
-		friend std::ostream& operator<<(std::ostream& stream,
-												  const array<T>& obj)
-		{
-			if (obj.n == 0)
-				return stream;
-
-			stream << "{";
-			for (unsigned i = 0, n = obj.n - 1; i < n; i++)
-				stream << obj[i] << ", ";
-			stream << obj[obj.n - 1] << "}";
-
-			return stream;
-
-		}
-    // OPERATIONS
-		
-		/** Reverse array
-		 *
-		 * @return		The entire array is reversed.
-		 */
-		void reverse(void);
-
-		/** Sort array (bubble sort)
-		 *
-		 * @param how		Flag, 'i' for increasing and 'd' for increasing.
-		 * @return			The entire array is sorted.
          */
-		void sort(const bool& how = true);
+        friend std::ostream& operator<<(std::ostream& stream,
+                                                  const array<T>& obj)
+        {
+            if (obj.n == 0)
+                return stream;
+
+            stream << "{";
+            for (unsigned i = 0, n = obj.n - 1; i < n; i++)
+                stream << obj[i] << ", ";
+            stream << obj[obj.n - 1] << "}";
+
+            return stream;
+
+        }
+    // OPERATIONS
+        
+        /** Reverse array
+         *
+         * @return      The entire array is reversed.
+         */
+        void reverse(void);
+
+        /** Sort array (bubble sort)
+         *
+         * @param how       Flag, 'i' for increasing and 'd' for increasing.
+         * @return          The entire array is sorted.
+         */
+        void sort(const bool& how = true);
 
     // ACCESS
 
-		/** Size of array
-		 * 
-		 * @return		Constant reference to the arrays size.
-		 */
-		const unsigned& size(void) const;
+        /** Size of array
+         * 
+         * @return      Constant reference to the arrays size.
+         */
+        const unsigned& size(void) const;
 
-		/** Prints the array.
-		 *
-		 * @param start	Index to start the pritning.
-		 * @param amt	Amount of elements to print.
-		 *
-		 * @invalid_argument	Throws exception if start + amt > n or amt < 1.
-		 */
-		void print(const unsigned& start, const unsigned& amt) const;
-		
+        /** Prints the array.
+         *
+         * @param start Index to start the pritning.
+         * @param amt   Amount of elements to print.
+         *
+         * @invalid_argument    Throws exception if start + amt > n or amt < 1.
+         */
+        void print(const unsigned& start, const unsigned& amt) const;
+        
 
     // INQUIRY
 
@@ -334,31 +334,31 @@ namespace raos {
         T*       ptr;   // Pointer to dynamically allocated array
         unsigned n;     // Size of array
 
-	// HELPER FUNCTIONS
-		
-		/** Swaps the data pointed to by a, b.
-		 *
-		 * @param a		Reference to data.
-		 * @param b		Reference to data.
-		 * @return		true (a swap flag can be set when calling swap).
-		 */
-		bool swap(T& a, T& b);
+    // HELPER FUNCTIONS
+        
+        /** Swaps the data pointed to by a, b.
+         *
+         * @param a     Reference to data.
+         * @param b     Reference to data.
+         * @return      true (a swap flag can be set when calling swap).
+         */
+        bool swap(T& a, T& b);
 
-		/** Compares a and b.
-		 * 
-		 * @param a		Constant reference to data.
-		 * @param b		Constant reference to data.
-		 * @return		> 0 if a > b.
-		 */
-		int cmpInc(const T& a, const T& b);
+        /** Compares a and b.
+         * 
+         * @param a     Constant reference to data.
+         * @param b     Constant reference to data.
+         * @return      > 0 if a > b.
+         */
+        int cmpInc(const T& a, const T& b);
 
-		/** Compares a and b.
-		 * 
-		 * @param a		Constant reference to data.
-		 * @param b		Constant reference to data.
-		 * @return		> 0 if b > a.
-		 */
-		int cmpDec(const T& a, const T& b);
+        /** Compares a and b.
+         * 
+         * @param a     Constant reference to data.
+         * @param b     Constant reference to data.
+         * @return      > 0 if b > a.
+         */
+        int cmpDec(const T& a, const T& b);
     };
 
 ////////////////////////////////  PUBLIC  /////////////////////////////////////
@@ -593,71 +593,71 @@ namespace raos {
         return tmp;
     }
 //=============================  OPERATIONS ===================================
-	
-	template<class T>
-	void array<T>::reverse(void)
-	{
-		for (T* head = ptr, *tail = ptr + n - 1; tail > head; head++, tail--)
-			swap(*head, *tail);
-	}
+    
+    template<class T>
+    void array<T>::reverse(void)
+    {
+        for (T* head = ptr, *tail = ptr + n - 1; tail > head; head++, tail--)
+            swap(*head, *tail);
+    }
 
-	template<class T>
-	void array<T>::sort(const bool& how)
-	{
-		bool swapped = true;
-		int (array::*cmp)(const T& a, const T& b);
-		
-		cmp = how == true ? &array::cmpInc : &array::cmpDec;	// decide how to sort
-		for (int i = 1; i < n && swapped; i++)
-			for (int j = 0; j < n - i; j++)
-				if ((this->*cmp)(*(ptr + j), *(ptr + j + 1)) > 0)
-					swapped = swap(*(ptr + j), *(ptr + j + 1));
-	}
+    template<class T>
+    void array<T>::sort(const bool& how)
+    {
+        bool swapped = true;
+        int (array::*cmp)(const T& a, const T& b);
+        
+        cmp = how == true ? &array::cmpInc : &array::cmpDec;    // decide how to sort
+        for (int i = 1; i < n && swapped; i++)
+            for (int j = 0; j < n - i; j++)
+                if ((this->*cmp)(*(ptr + j), *(ptr + j + 1)) > 0)
+                    swapped = swap(*(ptr + j), *(ptr + j + 1));
+    }
     
 //=============================  ACESS      ===================================
 
-	template<class T>
-	const unsigned& array<T>::size(void) const
-	{
-		return n;
-	}
+    template<class T>
+    const unsigned& array<T>::size(void) const
+    {
+        return n;
+    }
 
-	template<class T>
-	void array<T>::print(const unsigned& start, const unsigned& amt) const
-	{
-		if (start + amt > n || amt < 1)
-			throw std::invalid_argument("array::print");
+    template<class T>
+    void array<T>::print(const unsigned& start, const unsigned& amt) const
+    {
+        if (start + amt > n || amt < 1)
+            throw std::invalid_argument("array::print");
 
-		for (unsigned i = start, n = start + amt; i < n; i++)
-			std::cout << ptr[i] << " ";
-		std::cout << std::endl;
-	}
+        for (unsigned i = start, n = start + amt; i < n; i++)
+            std::cout << ptr[i] << " ";
+        std::cout << std::endl;
+    }
 
 //=============================  INQUIRY    ===================================
 
 //=============================  PRIVATE    ===================================
-	
-	template<class T>
-	bool array<T>::swap(T& a, T& b)
-	{
-		T tmp = a;
-		a     = b;
-		b     = tmp;
+    
+    template<class T>
+    bool array<T>::swap(T& a, T& b)
+    {
+        T tmp = a;
+        a     = b;
+        b     = tmp;
 
-		return true;
-	}
+        return true;
+    }
 
-	template<class T>
-	int array<T>::cmpInc(const T& a, const T& b)
-	{
-		return a - b;
-	}
+    template<class T>
+    int array<T>::cmpInc(const T& a, const T& b)
+    {
+        return a - b;
+    }
 
-	template<class T>
-	int array<T>::cmpDec(const T& a, const T& b)
-	{
-		return b - a;
-	}
+    template<class T>
+    int array<T>::cmpDec(const T& a, const T& b)
+    {
+        return b - a;
+    }
 }
 
 #endif // ARRAY_H
