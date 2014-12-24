@@ -203,4 +203,37 @@ protected:
 
 };
 
+template<class T>
+List<T>::List(void)
+    : head(nullptr), n(0)
+{
+}
+
+template<class T>
+List<T>::List(const List<T>& from)
+    : n(from.n)
+{
+    head->setData(from->getData());
+    for (Node<T>* to = head, fr = from.head; fr->getNext() != nullptr;
+         to = to->getNext(), fr = fr->getNext())
+        to->setNext(new Node<T>(fr->getNext()->getData()));
+}
+
+template<class T>
+List<T>::List(const List<T>&& from)
+    : head(from.head), n(from.n)
+{
+    from.head = nullptr;
+    from.n    = 0;
+}
+
+template<class T>
+List<T>::~List(void)
+{
+    for (Node<T>* curr = head, nextNode; curr != nullptr; curr = nextNode) {
+        nextNode = curr->getNext();
+        delete curr;
+    }
+}
+
 #endif // __LIST_H__
