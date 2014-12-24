@@ -203,6 +203,8 @@ protected:
 
 };
 
+// ****************************** Life cycle ***********************************
+
 template<class T>
 List<T>::List(void)
     : head(nullptr), n(0)
@@ -235,5 +237,53 @@ List<T>::~List(void)
         delete curr;
     }
 }
+
+// ****************************** Operators  ***********************************
+
+template<class T>
+const List<T>& List<T>::operator=(const List<T>& from)
+{
+    List::List(from); // call copy constructor
+    return *this;
+}
+
+template<class T>
+const List<T>& List<T>::operator=(const List<T>&& from)
+{
+    List::List(from); // call move constructor
+    return *this;
+}
+
+// ****************************** Operations ***********************************
+
+template<class T>
+bool List<T>::operator==(const List<T>& obj)
+{
+    if (this->n != obj.n)
+        return false;
+
+    // sizes match, compare element by element
+    for (Node<T>* curr_this = head, curr_obj = obj.head; curr_this != nullptr;
+         curr_this = curr_this->getNext(), curr_obj = curr_obj->getNext())
+        if (curr_this->getData != curr_obj->getData())
+            return false;
+    return true;
+}
+
+template<class T>
+bool List<T>::operator>(const List<T>& obj)
+{
+    Node<T>* curr_this = head;
+    Node<T>* curr_obj  = obj.head;
+
+    // compare element by element
+    for (int n = this->n > obj.n ? this->n : obj.n, i = 0; i < n; i++,
+         curr_this = curr_this->getNext(), curr_obj = curr_obj->getNext())
+        if (curr_this->getData() <= curr_obj->getData())
+            return false;
+    return this->n > obj.n;
+}
+
+// ****************************** Access ***************************************
 
 #endif // __LIST_H__
