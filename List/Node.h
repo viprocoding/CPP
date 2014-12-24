@@ -15,37 +15,44 @@ public:
 	 * @param Data		Data to initialize the node with.
 	 * @param Next		Pointer to next node, NULL if not specified.
 	 */
-	Node(const T& Data, const Node<T>& Next = nullptr);
+	Node(const T& Data, const Node<T>* Next = nullptr);
 
 	/** Copy constructor
 	 *
-	 * @param from		Node to copy to this object (deep).
+	 * @param from		Node to copy to this node with. Here, from.data is
+	 *					written to this->data, and this->next is set to nullptr.
 	 */
 	Node(const Node<T>& from);
 
-	/** Move constructor
+	/** Copy constructor (move version)
 	 *
-	 * @param from		Node to initialize this node with (steal).
+	 * There's no use for a move constructor here. Uncomment this if it's needed
+	 * in the future.
 	 */
-	Node(Node<T>&& from);
+	//Node(const Node<T>&& from);
 
 	/** Destructor
+	 * 
+	 * A destructor is not necessary here.  Uncomment this if it's nedded in the
+	 * future.
 	 */
-	~Node(void);
+	//~Node(void);
 
 // Operators
 	
 	/** Assignment operator
 	 *
-	 * @param from		Node to assign to this node (deep).
+	 * @param from		Node to assign to this node. Here, from.data is written
+	 *					to this->data, and next is left unchanged.
 	 */
-	const Node<T>& operator==(const Node<T>& from);
+	const Node<T>& operator=(const Node<T>& from);
 
-	/** Assignment operator, move version
+	/** Assignment operator (move version)
 	 *
-	 * @param from		Node to assign to this node (steal).
+	 * A move version of the assignment operator is not necessary here.
+	 * Uncomment this if it's needed in the future.
 	 */
-	const Node<T>& operator==(const Node<T>&& from);
+	//const Node<T>& operator=(const Node<T>&& from);
 
 // Operations
 	
@@ -80,5 +87,30 @@ protected:
 	Node<T>* next;	// Ptr to next node
 
 };
+
+template<class T>
+Node<T>::Node(void)
+	: next(nullptr)
+{
+}
+
+template<class T>
+Node<T>::Node(const T& Data, const Node<T>* Next)
+	: data(Data), next(Next)
+{
+}
+
+template<class T>
+Node<T>::Node(const Node<T>& from)
+	: data(from.data), next(nullptr)
+{
+}
+
+template<class T>
+const Node<T>& Node<T>::operator=(const Node<T>& from)
+{
+	data = from.data;
+	return *this;
+}
 
 #endif // __NODE_H__
