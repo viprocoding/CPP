@@ -1,18 +1,12 @@
 #ifndef __LIST_H__
 #define __LIST_H__
 
-// Libraries
-#include <utility>              // get all comparision operators
-
 // My headers
 #include "Node.h"
 
-// namespaces
-using namespace std::rel_ops;   // get all comparison operators
-
 template<class T>
 class List {
-private:
+public:
 // Life cycle
     
     /** Default constructor
@@ -58,12 +52,40 @@ private:
      */
     bool operator==(const List<T>& obj);
 
+    /** Not equal to operator
+     * 
+     * @param obj           List to compare with this object.
+     * @return              true / false.
+     */
+    bool operator!=(const List<T>& obj);
+
     /** Greater than operator
      * 
      * @param obj           List to compare with this object.
      * @return              true / false.
      */
     bool operator>(const List<T>& obj);
+
+    /** Greater than or equal operator
+     * 
+     * @param obj           List to compare with this object.
+     * @return              true / false.
+     */
+    bool operator>=(const List<T>& obj);
+
+    /** Less than operator
+     * 
+     * @param obj           List to compare with this object.
+     * @return              true / false.
+     */
+    bool operator<(const List<T>& obj);
+
+    /** Less than or equal operator
+     * 
+     * @param obj           List to compare with this object.
+     * @return              true / false.
+     */
+    bool operator<=(const List<T>& obj);
 
 // Operations
 
@@ -232,7 +254,7 @@ List<T>::List(const List<T>&& from)
 template<class T>
 List<T>::~List(void)
 {
-    for (Node<T>* curr = head, nextNode; curr != nullptr; curr = nextNode) {
+    for (Node<T>* curr = head, *nextNode; curr != nullptr; curr = nextNode) {
         nextNode = curr->getNext();
         delete curr;
     }
@@ -263,11 +285,17 @@ bool List<T>::operator==(const List<T>& obj)
         return false;
 
     // sizes match, compare element by element
-    for (Node<T>* curr_this = head, curr_obj = obj.head; curr_this != nullptr;
+    for (Node<T>* curr_this = head, *curr_obj = obj.head; curr_this != nullptr;
          curr_this = curr_this->getNext(), curr_obj = curr_obj->getNext())
-        if (curr_this->getData != curr_obj->getData())
+        if (curr_this->getData() != curr_obj->getData())
             return false;
     return true;
+}
+
+template<class T>
+bool List<T>::operator!=(const List<T>& obj)
+{
+    return !(*this == obj);
 }
 
 template<class T>
@@ -282,6 +310,24 @@ bool List<T>::operator>(const List<T>& obj)
         if (curr_this->getData() <= curr_obj->getData())
             return false;
     return this->n > obj.n;
+}
+
+template<class T>
+bool List<T>::operator>=(const List<T>& obj)
+{
+    return *this == obj || *this > obj;
+}
+
+template<class T>
+bool List<T>::operator<(const List<T>& obj)
+{
+    return !(*this >= obj); 
+}
+
+template<class T>
+bool List<T>::operator<=(const List<T>& obj)
+{
+    return *this == obj || *this < obj;
 }
 
 // ****************************** Access ***************************************
