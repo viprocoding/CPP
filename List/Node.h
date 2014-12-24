@@ -15,7 +15,7 @@ public:
 	 * @param Data		Data to initialize the node with.
 	 * @param Next		Pointer to next node, NULL if not specified.
 	 */
-	Node(const T& Data, const Node<T>* Next = nullptr);
+	Node(const T& Data, Node<T>* Next = nullptr);
 
 	/** Copy constructor
 	 *
@@ -59,14 +59,16 @@ public:
 	/** Set data
 	 * 
 	 * @param Data		Value to write to this->data.
+	 * @return			Reference to this node.
 	 */
-	void setData(const T& Data);
+	Node<T>& setData(const T& Data);
 
 	/** Set next node
 	 *
 	 * @param Next		Pointer to a node that is to be assigned to this->next.
+	 * @return			Reference to this node.
 	 */
-	void setNext(const Node<T>& Next);
+	Node<T>& setNext(const Node<T>& Next);
 
 // Access
 
@@ -78,9 +80,16 @@ public:
 
 	/** Get next node
 	 * 
-	 * @return			A pointer to this->next.
+	 * @return			Pointer to the next node.	
 	 */
-	// const Node<T>* getNext(void) const;
+	Node<T>* getNext(void) const;
+
+	/** Get this node
+	 *
+	 * @return			Pointer to this node.
+	 */
+	Node<T>* getThis(void) const;
+
 
 protected:
 	T data;			// Node data
@@ -95,7 +104,7 @@ Node<T>::Node(void)
 }
 
 template<class T>
-Node<T>::Node(const T& Data, const Node<T>* Next)
+Node<T>::Node(const T& Data, Node<T>* Next)
 	: data(Data), next(Next)
 {
 }
@@ -111,6 +120,37 @@ const Node<T>& Node<T>::operator=(const Node<T>& from)
 {
 	data = from.data;
 	return *this;
+}
+
+template<class T>
+Node<T>& Node<T>::setData(const T& Data)
+{
+	data = Data;
+	return *this;
+}
+
+template<class T>
+Node<T>& Node<T>::setNext(const Node<T>& Next)
+{
+	next = &Next;
+}
+
+template<class T>
+const T& Node<T>::getData(void) const
+{
+	return data;
+}
+
+template<class T>
+Node<T>* Node<T>::getNext(void) const
+{
+	return next;
+}
+
+template<class T>
+Node<T>* Node<T>::getThis(void) const
+{
+	return this;
 }
 
 #endif // __NODE_H__
