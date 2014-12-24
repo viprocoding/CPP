@@ -117,6 +117,27 @@ private:
 	 */
 	List<T>& reverese(void);
 
+	/** Merge lists
+	 *
+	 * @param with			List to merge to this object (steal).
+	 * @param pos			List position to do the merge.
+	 * @return				Reference to this object.
+	 *
+	 * @invalid_argument	An exception is generated if position is invalid.
+	 */
+	List<T>& merge(const int& pos, List<T>& with);
+
+	/** Merge lists in head or tail
+	 *
+	 * @param with			List to merge to this object (steal).
+	 * @param mode			Mode how to merge (valid: 'h' or 't').
+	 * @return				Reference to this object.
+	 *
+	 * @invalid_argument	An exception is generated if position is invalid.
+	 */
+	List<T>& merge(const char &mode, List<T>& with);
+
+
 // Access
 
 	/** Get size
