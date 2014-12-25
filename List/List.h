@@ -139,7 +139,7 @@ public:
      *
      * @return              Reference to this object.
      */
-    List<T>& sort(void) const;
+    List<T>& sort(void);
 
 // Access
 
@@ -197,6 +197,10 @@ public:
 protected:
     Node<T>* head;      // List head
     int n;              // List size
+
+private:
+    void sort_r(Node<T>** head, Node<T>* tail);
+    void merge(Node<T>**, Node<T>*, Node<T>**, Node<T>*);
 
 };
 
@@ -391,6 +395,24 @@ List<T>& List<T>::merge(const int& pos, List<T>& with)
     return *this;
 }
 
+template<class T>
+List<T>& List<T>::sort(void)
+{
+    // sorted list
+    if (this->head == nullptr || this->head->getNext() == nullptr)
+        return *this;
+
+    // find tail
+    Node<T>* tail = head;
+    while (tail->getNext() != nullptr)
+        tail = tail->getNext();
+
+    // implement merge sort
+    sort_r(&this->head, tail);
+
+    return *this;
+}
+
 // ****************************** Access ***************************************
 
 template<class T>
@@ -401,6 +423,55 @@ const List<T>& List<T>::print(void) const
     std::cout << std::endl;
 
     return *this;
+}
+
+// ****************************** Private **************************************
+
+template<class T>
+void p(Node<T>* a, Node<T>* b)
+{
+    while (a != b->getNext()) {
+        std::cout << a->getData() << " ";
+        a = a->getNext();
+    }
+    std::cout << std::endl;
+}
+
+template<class T>
+void List<T>::sort_r(Node<T>** head, Node<T>* tail)
+{
+    // base case
+    if (*head == tail)
+        return;
+
+    // find mid (let i move with 2x speed)
+    Node<T>* mid = *head;
+    for (Node<T>* i = *head; i != tail; i = i->getNext())
+        if (i->getNext() != tail) {
+            i = i->getNext();
+            mid = mid->getNext();   // this way mid will never be a nullptr
+        }
+   
+   std::cout << "L: "; p(*head, mid);
+   sort_r(head, mid);               // sort left side
+   std::cout << "R: "; p(mid->getNext(), tail);
+   sort_r(mid->nextAdr(), tail);    // sort right side
+   merge(head, mid, mid->nextAdr(), tail);
+}
+
+template<class T>
+void List<T>::merge(Node<T>** ls, Node<T>* le, Node<T>** rs, Node<T>* re)
+{
+    std::cout << "M: "; p(*ls, re);
+    for (Node<T>* reNext = re->getNext(); *ls != *rs && *rs != reNext; ) {
+        if ((*ls)->getData() > (*rs)->getData()) {
+            Node<T>* tmp_rs = *rs;
+            *rs = (*rs)->getNext();
+            tmp_rs->setNext(*ls);
+            *ls = tmp_rs;
+        }
+        ls = (*ls)->nextAdr();
+    }
 }
 
 #endif // __LIST_H__
