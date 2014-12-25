@@ -1,6 +1,10 @@
 #ifndef __LIST_H__
 #define __LIST_H__
 
+// Libraries
+#include <stdexcept>    // invalid_argument
+#include <iostream>
+
 // My headers
 #include "Node.h"
 
@@ -97,35 +101,16 @@ public:
      *
      * @invalid_argument    An exception is generated if position is invalid.
      */
-    List<T>& add(const int& pos);
-
-    /** Add new node in head or tail
-     * 
-     * @param data          Data to store in the new node.
-     * @param mode          Control character (valid: 'h' or 't')
-     * @return              Reference to this object.
-     *
-     * @invalid argument    An exception is generated if mode was invalid.
-     */
-    List<T>& add(const char& mode);
+    List<T>& add(const int& pos, const T& data);
 
     /** Remove node by position
      * 
      * @param pos           List position to insert the new node.
      * @return              Data stored in the removed node.
      *
-     * @invalid_argument    An exception is generated if position is invalid.
+     * @invalid_argument    An exception is generated if invalid position.
      */
-    T& rm(const int& pos);
-
-    /** Remove node in head or tail
-     * 
-     * @param mode          Control character (valid: 'h' or 't')
-     * @return              Data stored in the removed node.
-     *
-     * @invalid_argument    An exception is generated if position is invalid.
-     */
-    T& rm(const char& pos);
+    T rm(const int& pos);
 
     /** Remove all nodes in the list
      *
@@ -159,6 +144,11 @@ public:
      */
     List<T>& merge(const char &mode, List<T>& with);
 
+    /** Sort the list (merge sort)
+     *
+     * @return              Reference to this object.
+     */
+    List<T>& sort(void) const;
 
 // Access
 
@@ -211,13 +201,7 @@ public:
      * @invalid_argument    An exception is generated if start < end or if
      *                      start, end out of position.
      */
-    List<T>& print(void) const;
-
-    /** Sort the list (merge sort)
-     *
-     * @return              Reference to this object.
-     */
-    List<T>& sort(void) const;
+    const List<T>& print(void) const;
 
 protected:
     Node<T>* head;      // List head
@@ -276,8 +260,6 @@ const List<T>& List<T>::operator=(const List<T>&& from)
     return *this;
 }
 
-// ****************************** Operations ***********************************
-
 template<class T>
 bool List<T>::operator==(const List<T>& obj)
 {
@@ -330,6 +312,55 @@ bool List<T>::operator<=(const List<T>& obj)
     return *this == obj || *this < obj;
 }
 
+// ****************************** Operations ***********************************
+
+template<class T>
+List<T>& List<T>::add(const int& pos, const T& data)
+{
+    if (pos < 0 || pos > n)
+        throw std::invalid_argument("List<T>::add");
+
+    // Get in position to insert node
+    Node<T>** curr = &head;
+    for (int i = 0; i < pos; i++)
+        curr = (*curr)->nextAdr();
+
+    // Insert node
+    *curr = new Node<T>(data, *curr); this->n++;
+
+    return *this;
+}
+
+template<class T>
+T List<T>::rm(const int& pos)
+{
+    if (pos < 0 || pos >= this->n)
+        throw std::invalid_argument("List<T>::rm"); 
+
+    // Get in position to remove node
+    Node<T>** curr = &this->head;
+    for (int i = 0; i < pos; i++)
+        curr = (*curr)->nextAdr();
+
+    // Remove node
+    Node<T>* tmp    = *curr;                // don't lose node, need clean
+    T        rmData = tmp->getData();       // don't lose data, need return
+    *curr           = (*curr)->getNext();
+    delete tmp;
+
+    return rmData;
+}
+
 // ****************************** Access ***************************************
+
+template<class T>
+const List<T>& List<T>::print(void) const
+{
+    for (Node<T>* curr = this->head; curr != nullptr; curr = curr->getNext())
+        std::cout << curr->getData() << " ";
+    std::cout << std::endl;
+
+    return *this;
+}
 
 #endif // __LIST_H__

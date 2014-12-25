@@ -70,6 +70,12 @@ public:
      */
     Node<T>& setNext(const Node<T>& Next);
 
+    /** Get next adress
+     *
+     * @return          The adress of the pointer to the next node.
+     */
+    Node<T>** nextAdr(void);
+
 // Access
 
     /** Get data
@@ -84,17 +90,10 @@ public:
      */
     Node<T>* getNext(void) const;
 
-    /** Get this node
-     *
-     * @return          Pointer to this node.
-     */
-    Node<T>* getThis(void) const;
-
-
 protected:
+
     T data;         // Node data
     Node<T>* next;  // Ptr to next node
-
 };
 
 template<class T>
@@ -148,9 +147,9 @@ Node<T>* Node<T>::getNext(void) const
 }
 
 template<class T>
-Node<T>* Node<T>::getThis(void) const
+Node<T>** Node<T>::nextAdr(void)
 {
-    return this;
+    return &next;
 }
 
 #endif // __NODE_H__
