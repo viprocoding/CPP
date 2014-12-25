@@ -68,7 +68,7 @@ public:
      * @param Next      Pointer to a node that is to be assigned to this->next.
      * @return          Reference to this node.
      */
-    Node<T>& setNext(const Node<T>& Next);
+    Node<T>& setNext(Node<T>* Next);
 
     /** Get next adress
      *
@@ -129,9 +129,10 @@ Node<T>& Node<T>::setData(const T& Data)
 }
 
 template<class T>
-Node<T>& Node<T>::setNext(const Node<T>& Next)
+Node<T>& Node<T>::setNext(Node<T>* Next)
 {
-    next = &Next;
+    next = Next;
+    return *this;
 }
 
 template<class T>

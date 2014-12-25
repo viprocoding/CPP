@@ -122,7 +122,7 @@ public:
      *
      * @return              Reference to this object.
      */
-    List<T>& reverese(void);
+    List<T>& reverse(void);
 
     /** Merge lists
      *
@@ -242,6 +242,8 @@ List<T>::~List(void)
         nextNode = curr->getNext();
         delete curr;
     }
+    this->head = nullptr;
+    this->n    = 0;
 }
 
 // ****************************** Operators  ***********************************
@@ -349,6 +351,27 @@ T List<T>::rm(const int& pos)
     delete tmp;
 
     return rmData;
+}
+
+template<class T>
+List<T>& List<T>::clear(void)
+{
+    List::~List();
+    return *this;
+}
+
+template<class T>
+List<T>& List<T>::reverse(void)
+{
+    // reverse list
+    Node<T>* newHead = nullptr;
+    for (Node<T>* curr = this->head, *next; curr != nullptr; curr = next) {
+        next = curr->getNext();             // dont lose next node
+        newHead = &curr->setNext(newHead);  // place latest node in the front
+    }
+    this->head = newHead;   // complete the switch
+
+    return *this;
 }
 
 // ****************************** Access ***************************************
