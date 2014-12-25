@@ -130,19 +130,10 @@ public:
      * @param pos           List position to do the merge.
      * @return              Reference to this object.
      *
-     * @invalid_argument    An exception is generated if position is invalid.
+     * @invalid_argument    An exception is generated if position is invalid or
+     *                      if with is a reference to this object.
      */
     List<T>& merge(const int& pos, List<T>& with);
-
-    /** Merge lists in head or tail
-     *
-     * @param with          List to merge to this object (steal).
-     * @param mode          Mode how to merge (valid: 'h' or 't').
-     * @return              Reference to this object.
-     *
-     * @invalid_argument    An exception is generated if position is invalid.
-     */
-    List<T>& merge(const char &mode, List<T>& with);
 
     /** Sort the list (merge sort)
      *
@@ -370,6 +361,32 @@ List<T>& List<T>::reverse(void)
         newHead = &curr->setNext(newHead);  // place latest node in the front
     }
     this->head = newHead;   // complete the switch
+
+    return *this;
+}
+
+template<class T>
+List<T>& List<T>::merge(const int& pos, List<T>& with)
+{
+    if (pos < 0 || pos > n || *this == with)
+        throw std::invalid_argument("List<T>::merge");
+
+    // Get in position to do the merge
+    Node<T>** curr = &this->head;
+    for (int i = 0; i < pos; i++)
+        curr = (*curr)->nextAdr();
+
+    // Merge lists
+    Node<T>* tmp = *curr;   // this node has to be appened to end of 'with'
+    *curr = with.head;      // append 'with' to current position in *this
+    while (*curr != nullptr)
+        curr = (*curr)->nextAdr();
+    (*curr) = tmp;          // complete the merge
+    this->n += with.n;      // uppdate size
+
+    // Clean up 'with'
+    with.head = nullptr;
+    with.n    = 0;
 
     return *this;
 }
