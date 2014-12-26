@@ -188,6 +188,10 @@ protected:
     int n;              // List size
 
 private:
+    // Helper functions
+    void sort_r(Node<T>** head);
+    void split(Node<T>* head, Node<T>** left, Node<T>** right);
+    Node<T>* merge(Node<T>* left, Node<T>* right);
 
 };
 
@@ -382,6 +386,13 @@ List<T>& List<T>::merge(const int& pos, List<T>& with)
     return *this;
 }
 
+template<class T>
+List<T>& List<T>::sort(void)
+{
+    sort_r(&this->head);
+    return *this;
+}
+
 // ****************************** Access ***************************************
 
 template<class T>
@@ -436,5 +447,65 @@ const List<T>& List<T>::print(void) const
 }
 
 // ****************************** Private **************************************
+
+template<class T>
+void List<T>::sort_r(Node<T>** head)
+{
+    // base case
+    if (*head == nullptr || (*head)->getNext() == nullptr)
+        return;
+
+    // Divide list into two halves
+    Node<T>* leftSide;
+    Node<T>* rightSide;
+    split(*head, &leftSide, &rightSide);
+
+    sort_r(&leftSide);
+    sort_r(&rightSide);
+    *head = merge(leftSide, rightSide);
+}
+
+template<class T>
+void List<T>::split(Node<T>* head, Node<T>** l, Node<T>** r)
+{
+    Node<T>* fast;
+    Node<T>* slow;
+
+    slow = head;
+    fast = head->getNext();
+    while (fast != nullptr) {
+        fast = fast->getNext();
+        if (fast != nullptr) {
+            slow = slow->getNext();
+            fast = fast->getNext();
+        }
+    }
+
+    *l = head;
+    *r = slow->getNext();
+    slow->setNext(nullptr);
+}
+
+template<class T>
+Node<T>* List<T>::merge(Node<T>* l, Node<T>* r)
+{
+    // Base cases
+    if (l == nullptr)
+        return r;
+    if (r == nullptr)
+        return l;
+
+    Node<T>* subHead;
+    if (l->getData() > r->getData()) {
+        subHead = r;
+        r->setNext(merge(l, r->getNext()));
+    }
+    else {
+        subHead = l;
+        l->setNext(merge(l->getNext(), r));
+    }
+
+    return subHead;
+}
 
 #endif // __LIST_H__
