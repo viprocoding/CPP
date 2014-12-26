@@ -27,7 +27,7 @@ public:
      *
      * @param from          This object is copied to this list (stolen).
      */
-    List(const List<T>&& from);
+    List(List<T>&& from);
 
     /** Destructor
      */
@@ -155,15 +155,12 @@ public:
      */
     bool isEmpty(void) const;
 
-    /** Search node
+    /** Search node (traverses the list for matches)
      * 
      * @param key           Node to be searched for.
-     * @return              Position in the list, less than 0 if no match.
-     *
-     * -- Maybe generate exception such as no_match, and switch all int to
-     *    unsigned. --
+     * @return              List with all positions containing a match.
      */
-    int search(const T& key) const;
+    List<int> search(const T& key) const;
 
     /** Peek at position
      *
@@ -173,15 +170,6 @@ public:
      * @invalid_argument    An exception is generated.
      */
     const T& peek(const int& pos) const;    
-    
-    /** Peek head or tail.
-     *
-     * @param mode          Control character (valid: 'h' or 't').
-     * @return              Data stored in the specified position.
-     *
-     * @invalid_argument    An exception is generated.
-     */
-    const T& peek(const char& mode) const;  
 
     /** Prints the list
      *
@@ -195,12 +183,11 @@ public:
     const List<T>& print(void) const;
 
 protected:
+
     Node<T>* head;      // List head
     int n;              // List size
 
 private:
-    void sort_r(Node<T>** head, Node<T>* tail);
-    void merge(Node<T>**, Node<T>*, Node<T>**, Node<T>*);
 
 };
 
@@ -223,7 +210,7 @@ List<T>::List(const List<T>& from)
 }
 
 template<class T>
-List<T>::List(const List<T>&& from)
+List<T>::List( List<T>&& from)
     : head(from.head), n(from.n)
 {
     from.head = nullptr;
@@ -395,25 +382,48 @@ List<T>& List<T>::merge(const int& pos, List<T>& with)
     return *this;
 }
 
+// ****************************** Access ***************************************
+
 template<class T>
-List<T>& List<T>::sort(void)
+const int& List<T>::size(void) const
 {
-    // sorted list
-    if (this->head == nullptr || this->head->getNext() == nullptr)
-        return *this;
-
-    // find tail
-    Node<T>* tail = head;
-    while (tail->getNext() != nullptr)
-        tail = tail->getNext();
-
-    // implement merge sort
-    sort_r(&this->head, tail);
-
-    return *this;
+    return this->n;
 }
 
-// ****************************** Access ***************************************
+template<class T>
+bool List<T>::isEmpty(void) const
+{
+    return this->n <= 0;
+}
+
+template<class T>
+List<int> List<T>::search(const T& data) const
+{
+    List<int> matches;
+    Node<T>* curr = this->head;
+
+    // Find all matches
+    for (int i = 0; i < this->n; i++) {
+        if (curr->getData() == data)
+            matches.add(0, i);
+        curr = curr->getNext();
+    }
+
+    return matches;
+}
+
+template<class T>
+const T& List<T>::peek(const int& pos) const
+{
+    if (pos < 0 || pos >= this->n)
+        throw std::invalid_argument("List<T>::peek");
+
+    Node<T>* curr = this->head;
+    for (int i = 0; i < pos; i++)
+        curr = curr->getNext();
+
+    return curr->getData();
+}
 
 template<class T>
 const List<T>& List<T>::print(void) const
@@ -426,52 +436,5 @@ const List<T>& List<T>::print(void) const
 }
 
 // ****************************** Private **************************************
-
-template<class T>
-void p(Node<T>* a, Node<T>* b)
-{
-    while (a != b->getNext()) {
-        std::cout << a->getData() << " ";
-        a = a->getNext();
-    }
-    std::cout << std::endl;
-}
-
-template<class T>
-void List<T>::sort_r(Node<T>** head, Node<T>* tail)
-{
-    // base case
-    if (*head == tail)
-        return;
-
-    // find mid (let i move with 2x speed)
-    Node<T>* mid = *head;
-    for (Node<T>* i = *head; i != tail; i = i->getNext())
-        if (i->getNext() != tail) {
-            i = i->getNext();
-            mid = mid->getNext();   // this way mid will never be a nullptr
-        }
-   
-   std::cout << "L: "; p(*head, mid);
-   sort_r(head, mid);               // sort left side
-   std::cout << "R: "; p(mid->getNext(), tail);
-   sort_r(mid->nextAdr(), tail);    // sort right side
-   merge(head, mid, mid->nextAdr(), tail);
-}
-
-template<class T>
-void List<T>::merge(Node<T>** ls, Node<T>* le, Node<T>** rs, Node<T>* re)
-{
-    std::cout << "M: "; p(*ls, re);
-    for (Node<T>* reNext = re->getNext(); *ls != *rs && *rs != reNext; ) {
-        if ((*ls)->getData() > (*rs)->getData()) {
-            Node<T>* tmp_rs = *rs;
-            *rs = (*rs)->getNext();
-            tmp_rs->setNext(*ls);
-            *ls = tmp_rs;
-        }
-        ls = (*ls)->nextAdr();
-    }
-}
 
 #endif // __LIST_H__
