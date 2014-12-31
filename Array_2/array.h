@@ -2,7 +2,8 @@
 #define ARRAY_2_H
 
 // Libraries
-#include <new>      // bad alloc
+#include <new>          // bad alloc
+#include <stdexcept>    // out_of_range
 
 /**
  * My notes:
@@ -10,7 +11,7 @@
  *    sizes.
  */
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 class array {
 public:
 // Life Cycle
@@ -42,6 +43,23 @@ public:
 // Operations
 
 // Access
+    
+    /** Access element by index
+     *
+     * @param i         Index of an element in the array.
+     * @return          Reference to the specified element.
+     *
+     * @out_of_range    Genererade if invalid index.
+     */
+    T& at(std::size_t i);
+
+    /** Constant version of 'at'
+     */
+    const T& at(std::size_t i) const;
+
+   
+
+
 
 // Iterators
 private:
@@ -52,29 +70,50 @@ private:
 
 ///////////////////////////// Life Cycle ///////////////////////////////////////
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 array<T, N>::array(void)
     : ptr(new T[N])
 {
 }
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 array<T, N>::array(const array<T, N>& from)
 {
     // todo
 }
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 array<T, N>::array(array<T, N>&& from)
 {
     // todo
 }
 
-template<class T, size_t N>
+template<class T, std::size_t N>
 array<T, N>::~array(void)
 {
     delete[] ptr;
 }
+
+///////////////////////////// Access ///////////////////////////////////////////
+
+template<class T, std::size_t N>
+T& array<T, N>::at(std::size_t i)
+{
+    if (i >= N)
+        throw std::out_of_range("array::at");
+
+    return *(ptr + i);
+}
+
+template<class T, std::size_t N>
+const T& array<T, N>::at(std::size_t i) const
+{
+    if (i >= N)
+        throw std::out_of_range("array::at");
+
+    return *(ptr + i);
+}
+
 
 #endif // ARRAY_2_H
 
