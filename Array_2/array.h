@@ -4,6 +4,8 @@
 // Libraries
 #include <new>          // bad alloc
 #include <stdexcept>    // out_of_range
+#include <iterator>
+#include <cstddef>
 
 /**
  * My notes:
@@ -42,6 +44,12 @@ public:
 
 // Operations
 
+    /** Fills the entire array with a value.
+     *
+     * @param val       Value to fill the array with.
+     */
+    void fill(const T& val);
+
 // Access
     
     /** Access element by index
@@ -57,11 +65,8 @@ public:
      */
     const T& at(std::size_t i) const;
 
-   
-
-
-
 // Iterators
+    
 private:
     /** Ptr to array start
      */
@@ -93,6 +98,15 @@ array<T, N>::~array(void)
 {
     delete[] ptr;
 }
+
+///////////////////////////// Operations ///////////////////////////////////////
+
+template<class T, std::size_t N>
+void array<T, N>::fill(const T& val)
+{
+    // todo
+}
+
 
 ///////////////////////////// Access ///////////////////////////////////////////
 
