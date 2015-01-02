@@ -4,7 +4,7 @@
 // Libraries
 #include <new>          // bad alloc
 #include <stdexcept>    // out_of_range
-#include <iterator>
+//#include <iterator>
 #include <cstddef>
 
 /**
@@ -13,9 +13,48 @@
  *    sizes.
  */
 
+
+template<class T>
+class RandomAccessIterator
+    : public std::iterator<std::random_access_iterator_tag, T*> {
+public:
+
+    RandomAccessIterator(T* ptr_) : ptr(ptr_) {}
+    RandomAccessIterator(const RandomAccessIterator& from) : ptr(from.ptr) {}
+
+    RandomAccessIterator& operator++(void)
+    {
+        ++ptr;
+        return *this;
+    }
+
+    bool operator==(const RandomAccessIterator& with)
+    {
+        return ptr == with.ptr;
+    }
+
+    bool operator!=(const RandomAccessIterator& with)
+    {
+        return ptr != with.ptr;
+    }
+
+    T& operator*(void) { return *ptr; };
+
+private:
+    
+    T* ptr;
+
+};
+
+
 template<class T, std::size_t N>
 class array {
 public:
+    typedef RandomAccessIterator<T> iterator;
+
+    iterator begin(void) { return iterator(ptr); }
+    iterator end(void) { return iterator(ptr + N); }
+
 // Life Cycle
     
     /** Constructor
