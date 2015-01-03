@@ -51,43 +51,64 @@ public:
      *
      * @param from      Iterator that is to be assigned from.
      */
-    const RandomAccessIterator& operator=(const RandomAccessIterator& from);
+    const RandomAccessIterator& operator=(const RandomAccessIterator& from)
+    {
+        this->ptr = from.ptr;
+    }
 
     /** Equal to operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator==(const RandomAccessIterator& that);
+    bool operator==(const RandomAccessIterator& that)
+    {
+        return this->ptr == that.ptr;
+    }
 
     /** Not equal to operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator!=(const RandomAccessIterator& that);
+    bool operator!=(const RandomAccessIterator& that)
+    {
+        return this->ptr != that.ptr;
+    }
 
     /** Larger than operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator>(const RandomAccessIterator& that);
+    bool operator>(const RandomAccessIterator& that)
+    {
+        return this->ptr > that.ptr;
+    }
 
     /** Larger than or equal to operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator>=(const RandomAccessIterator& that);
+    bool operator>=(const RandomAccessIterator& that)
+    {
+        return this->ptr >= that.ptr;
+    }
 
     /** Less than operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator<(const RandomAccessIterator& that);
+    bool operator<(const RandomAccessIterator& that)
+    {
+        return this->ptr < that.ptr;
+    }
 
     /** Less than or equal to operator
      *
      * @param that      Iterator to compare this object with.
      */
-    bool operator <=(const RandomAccessIterator& that);
+    bool operator <=(const RandomAccessIterator& that)
+    {
+        return this->ptr <= that.ptr;
+    }
 
 // Operations
 
@@ -95,74 +116,125 @@ public:
      *
      * @return          Reference to this object.
      */
-    RandomAccessIterator& operator++(void);
+    RandomAccessIterator& operator++(void)
+    {
+        ++this->ptr;
+        return *this;
+    }
 
     /** Postfix increment operator
      *
-     * @return          Reference to this object.
+     * @return          Rvalue object with post decrement data.
      */
-    RandomAccessIterator& operator++(int);
+    RandomAccessIterator operator++(int)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        ++this->ptr;
+        return tmp;
+    }
 
     /** Prefix decrement operator
      *
      * @return          Reference to this object.
      */
-    RandomAccessIterator& operator--(void);
+    RandomAccessIterator& operator--(void)
+    {
+        ++this->ptr;
+        return *this;
+    }
 
     /** Postfix decrement operator
      *
-     * @return          Reference to this object.
+     * @return          Rvalue object with post decrement data.
      */
-    RandomAccessIterator& operator--(int);
+    RandomAccessIterator operator--(int)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        ++this->ptr;
+        return tmp;
+    }
 
     /** Addition operator (iterator version)
      *
      * @param that      Iterator to add with this object.
-     * @return          Reference to this object.
+     * @return          Rvalue object with result.
      */
-    RandomAccessIterator& operator+(const RandomAccessIterator& that);
+    RandomAccessIterator operator+(const RandomAccessIterator& that)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        tmp.ptr += tmp.ptr + that.ptr;
+        return tmp;
+    }
 
     /** Subtraction  operator (iterator version)
      *
      * @param that      Iterator to subtract with this object.
-     * @return          Reference to this object.
+     * @return          Rvalue object with result.
      */
-    RandomAccessIterator& operator-(const RandomAccessIterator& that);
+    RandomAccessIterator operator-(const RandomAccessIterator& that)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        tmp.ptr -= (tmp.ptr - that.ptr);
+        return tmp;
+    }
 
     /** Addition operator (integer version)
      *
      * @param i         Amount of incremenets from current iterator positition.
-     * @return          Reference to this object.
+     * @return          Rvalue object with result.
      */
-    RandomAccessIterator& operator+(int i);
+    RandomAccessIterator operator+(int i)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        tmp.ptr += i;
+        return tmp;
+    }
 
     /** Subtraction operator (integer versino)
      *
      * @param i         Amount of decrements from current iterator position.
-     * @return          Reference to this object.
+     * @return          Rvalue object with result.
      */
-    RandomAccessIterator& operator-(int i);
+    RandomAccessIterator operator-(int i)
+    {
+        RandomAccessIterator<T> tmp(*this);
+        tmp.ptr -= i; 
+        return tmp;
+    }
 
     /** Addition assignment with integer
      *
      * @param i         Amount of incremenets from current iterator position.
      * @return          Reference to this object.
      */
-    RandomAccessIterator& operator+=(int i);
+    RandomAccessIterator& operator+=(int i)
+    {
+        this->ptr += i;
+        return *this;
+    }
 
     /** Subtraction assignment with integer
      *
      * @param i         Amount of decrements from current iterator position.
      * @return          Reference to this object.
      */
-    RandomAccessIterator& operator-=(int i);
+    RandomAccessIterator& operator-=(int i)
+    {
+        this->ptr -= i;
+        return *this;
+    }
 
     /** Swaps lvalues a and b
      *
      * @param a         Reference to an lvalue.
      * @param b         Reference to an lvalue.
      */
-    void swap(T& a, T&b);
+    void swap(T& a, T&b)
+    {
+        T tmp = a;
+        a     = b;
+        b     = tmp;
+    }
 
 // Access
 
@@ -170,13 +242,19 @@ public:
      *
      * @return          Reference to the iterators current element.
      */
-    T& operator*(void);
+    T& operator*(void)
+    {
+        return *this->ptr;
+    }
 
     /** Dereference operator (constant version)
      *
      * @return          Constant reference to the iterators current element.
      */
-    const T& operator*(void) const;
+    const T& operator*(void) const
+    {
+        return *this->ptr;
+    }
 
     // -> operator ?
 
@@ -184,13 +262,19 @@ public:
      *
      * @return          Reference to the indexed elemenet.
      */
-    T& operator[](int i);
+    T& operator[](int i)
+    {
+        return *(this->ptr + i);
+    }
 
     /** Offset dereference operator (constant version)
      *
      * @return          Constant reference to the indexed element.
      */
-    const T& operator[](int i) const;
+    const T& operator[](int i) const
+    {
+        return *(this->ptr + i);
+    }
 
 private:
     
